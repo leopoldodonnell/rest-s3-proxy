@@ -1,8 +1,11 @@
-FROM ubuntu
-MAINTAINER Phillip Whittlesea <pw.github@thga.me.uk>
+FROM golang:1.8
 
-RUN apt-get update
-RUN apt-get install -y ca-certificates
+ENV GOPATH /go
+ENV PATH "$GOPATH/bin:$PATH"
 
-COPY app /app
-CMD ["/app"]
+# RUN go get -u github.com/leopoldodonnell/clairctl
+COPY . /go/src/github.com/leopoldodonnell/rest-s3-proxy
+WORKDIR /go/src/github.com/leopoldodonnell/rest-s3-proxy
+RUN go install && rm -rf /go/src
+
+ENTRYPOINT [ "rest-s3-proxy" ]
